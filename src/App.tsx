@@ -1,21 +1,25 @@
 import React from 'react';
 import LogoSvg from "./assets/svg/logo";
 import {Modal, ModalContents, ModalContext, ModalOpenButton} from "./components/shared/modal";
-import {Button , FormGroup , Input} from "./components/libs"
+import {Button , FormGroup , Input , Spinner } from "./components"
 import styles from "./app.module.scss"
+import {User} from "./constants/global";
+import {useAsync} from "./libs/hooks";
+import {restHandler} from "./libs/rest";
+import {login, register} from "./libs/auth";
 
 
-const LoginForm: React.FC<{onSubmit : (payload : {username : string , password : string}) => void}> = ({onSubmit}) => {
+const LoginForm: React.FC<{onSubmit : (payload : User) => Promise<any>}> = ({onSubmit}) => {
     const [, setIsOpen] = React.useContext(ModalContext);
+    const {data , isLoading , run} = useAsync()
 
     const handleSubmit = (e: React.BaseSyntheticEvent) => {
         e.preventDefault();
         const [username, password] = e.target.elements as Array<HTMLInputElement>;
-        setIsOpen(false)
-        onSubmit({
+        run(onSubmit({
             username : username.value,
             password : password.value
-        })
+        }))
     }
 
     return (
@@ -30,34 +34,30 @@ const LoginForm: React.FC<{onSubmit : (payload : {username : string , password :
                     <label>Password : </label>
                     <Input type="password" name={"password"}/>
                 </FormGroup>
-                <Button type={"submit"} variant={"primary"}>Submit</Button>
+                <Button disabled={isLoading} type={"submit"} variant={"primary"}>{isLoading ? <Spinner/> : "Login"}</Button>
             </form>
         </>
     )
 }
 
-const RegisterForm: React.FC<{onSubmit : (payload : {username : string , password : string , email : string}) => void}> = ({onSubmit}) => {
+const RegisterForm: React.FC<{onSubmit : (payload : User) => Promise<any>}> = ({onSubmit}) => {
     const [, setIsOpen] = React.useContext(ModalContext);
+    const {data , isLoading , run} = useAsync()
 
     const handleSubmit = (e: React.BaseSyntheticEvent) => {
         e.preventDefault();
         const [email , username, password] = e.target.elements as Array<HTMLInputElement>;
-        setIsOpen(false)
-        onSubmit({
-            email : email.value,
+        // setIsOpen(false)
+        run(onSubmit({
             username : username.value,
             password : password.value
-        })
+        }))
     }
 
     return (
         <>
             <h2 className="text-center mt-3">Register</h2>
             <form onSubmit={handleSubmit} className={"d-flex flex-column mx-4 p-2"}>
-                <FormGroup>
-                    <label>Email : </label>
-                    <Input type="email" name={"email"}/>
-                </FormGroup>
                 <FormGroup>
                     <label>Username : </label>
                     <Input type="text" name={"email"}/>
@@ -66,7 +66,7 @@ const RegisterForm: React.FC<{onSubmit : (payload : {username : string , passwor
                     <label>Password : </label>
                     <Input type="password" name={"email"}/>
                 </FormGroup>
-                <Button variant={"primary"}>Register</Button>
+                <Button disabled={isLoading} type={"submit"} variant={"primary"}>{isLoading ? <Spinner/> : "Register"}</Button>
             </form>
         </>
     )
@@ -74,13 +74,8 @@ const RegisterForm: React.FC<{onSubmit : (payload : {username : string , passwor
 
 function App() {
 
-    const onSubmitLogin = (payload: { username: string, password: string }) => {
-        console.log(payload)
-    }
-
-    const onSubmitRegister = (payload: { email : string , username: string, password: string }) => {
-        console.log(payload)
-    }
+    const onSubmitLogin = (payload: User) => login(payload);
+    const onSubmitRegister = (payload: User) => register(payload)
 
     return (
         <div className={styles.App}>

@@ -1,4 +1,6 @@
 import styled from "@emotion/styled"
+import {FaSpinner} from "react-icons/fa"
+import {keyframes} from "@emotion/react";
 
 type variantTypes = "primary" | "secondary" | "accent"
 const variants = {
@@ -37,3 +39,11 @@ export const Input = styled.input({
     padding : "8px 12px",
     border : "1px solid rgb(241,242,244)"
 });
+
+const spin = keyframes({
+    "0%" : {transform : "rotate(0deg)"},
+    "100%" : {transform : "rotate(360deg)"}
+})
+export const Spinner = styled(FaSpinner)({
+    animation : `${spin} 1s infinite`
+})
