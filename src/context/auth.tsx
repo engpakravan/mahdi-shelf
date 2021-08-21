@@ -13,7 +13,7 @@ export const AuthProvider : React.FC = (props) => {
 
     React.useEffect(() => {
         const token = auth.getToken();
-        if(token) setData({user : "Mahdi"})
+        if(token) setData({displayName :"Mahdi"})
         else setData(null);
     } , [run])
 

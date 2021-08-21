@@ -65,3 +65,22 @@ export const FullPageError : React.FC<{ error: string }> = (props) => {
         </div>
     )
 }
+
+export function FullPageErrorFallback({error} : {error :  Error}) {
+    return (
+        <div
+            role="alert"
+            css={{
+                color: 'red',
+                height: '100vh',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+            }}
+        >
+            <p>Uh oh... There's a problem. Try refreshing the app.</p>
+            <pre>{error.message}</pre>
+        </div>
+    )
+}
