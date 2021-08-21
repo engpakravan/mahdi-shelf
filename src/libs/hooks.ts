@@ -5,6 +5,7 @@ export type useAsyncReturnType = {
     isLoading: boolean,
     isError: boolean,
     isSuccess: boolean,
+    isIdle : boolean
 
     setData : any,
     setError : any,
@@ -28,7 +29,7 @@ function useSafeDispatch<T>(dispatch : T|any) : (args : T) => void {
     )
 }
 
-export const useAsync = (initialState ?: useAsyncType) : useAsyncReturnType => {
+export const useAsync = <T>(initialState ?: useAsyncType) : useAsyncReturnType => {
     const initialRef = React.useRef<useAsyncType>(
         {
         status: 'idle',
@@ -43,7 +44,7 @@ export const useAsync = (initialState ?: useAsyncType) : useAsyncReturnType => {
     const safeSetState = useSafeDispatch<useAsyncType>(setState);
 
     const setData = React.useCallback(
-        data => safeSetState({data , status : "resolved"})
+        (data : T) => safeSetState({data , status : "resolved"})
     , [safeSetState]);
 
     const setError = React.useCallback(
@@ -75,6 +76,7 @@ export const useAsync = (initialState ?: useAsyncType) : useAsyncReturnType => {
         isLoading: status === 'pending',
         isError: status === 'rejected',
         isSuccess: status === 'resolved',
+        isIdle : status === "idle",
 
         setData,
         setError,

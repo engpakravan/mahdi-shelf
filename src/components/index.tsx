@@ -1,8 +1,10 @@
+import React from "react";
 import styled from "@emotion/styled"
-import {FaSpinner} from "react-icons/fa"
+import {FaSpinner , FaCarCrash} from "react-icons/fa"
 import {keyframes} from "@emotion/react";
+import styles from "./app.module.scss"
 
-type variantTypes = "primary" | "secondary" | "accent"
+type variantTypes = "primary" | "secondary" | "accent" | "danger"
 const variants = {
     primary : {
         background : "#3f51b5",
@@ -15,6 +17,10 @@ const variants = {
     accent : {
         background : "#f1f2f7" ,
         color : "#434449"
+    },
+    danger : {
+        background : "#bc2222" ,
+        color : "#f1f2f7"
     }
 }
 
@@ -47,3 +53,15 @@ const spin = keyframes({
 export const Spinner = styled(FaSpinner)({
     animation : `${spin} 1s infinite`
 })
+
+export const FullPageSpinner : React.FC = () => <div className={styles.App} style={{fontSize : "4em"}}><Spinner /></div>;
+export const FullPageError : React.FC<{ error: string }> = (props) => {
+    return (
+        <div className={`${styles.App} text-danger`}>
+            <h1><FaCarCrash/></h1>
+            <h6>Something Wrong !</h6>
+            <p>{props.error}</p>
+            <Button variant={"danger"} onClick={() => window.location.reload()}>Refresh</Button>
+        </div>
+    )
+}

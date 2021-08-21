@@ -10,9 +10,7 @@ export const restHandler = <I,O>(endpoint : string , customConfig : restConfigTy
         headers : {'Content-Type': 'application/json'},
         ...customConfig
     }
-    console.log(config)
     return window.fetch(endpoint , config).then(async (response : Response) => {
-        console.log(response);
         const data = await response.json();
         if(response.ok) {
             return data;

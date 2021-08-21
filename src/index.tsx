@@ -4,10 +4,13 @@ import "./assets/scss/index.scss"
 import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
+import {AuthProvider} from "./context/auth";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+      <AuthProvider>
+          <App />
+      </AuthProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
